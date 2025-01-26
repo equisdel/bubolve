@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     public string name;
     public string description;
 
+    public CharacterController characterController;
+
     public float size;          // radio
     public float thickness;     // afecta que tanto impactan los ataques en la pérdida de health
     public float movement_speed;  // escapar más rápido de los enemigos
@@ -70,6 +72,8 @@ public class PlayerController : MonoBehaviour
             mov += new Vector3(0, 0, -1);
         }
 
+        characterController.Move(mov.normalized * bubble.movement_speed * Time.deltaTime);
+
         if (Input.GetKey(KeyCode.Alpha1))
         {
             selectedAbilityIndex = 0;
@@ -97,8 +101,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-
-        transform.position += mov.normalized * bubble.movement_speed * Time.deltaTime;
     }
 
     void FixedUpdate(){

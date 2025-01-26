@@ -14,11 +14,19 @@ public class Ability : MonoBehaviour
     internal float currentTime = 0;
     internal ParentEntity parentEntity;
     internal GameObject entityGameObject;
+    internal GameObject targetEntity;
 
     public virtual void SetEntity(ParentEntity parentEntity, GameObject entityGameObject)
     {
         this.parentEntity = parentEntity;
         this.entityGameObject = entityGameObject;
+    }
+
+    public virtual void SetEntity(ParentEntity parentEntity, GameObject entityGameObject, GameObject targetEntity)
+    {
+        this.parentEntity = parentEntity;
+        this.entityGameObject = entityGameObject;
+        this.targetEntity = targetEntity;
     }
 
     public virtual void DoAction()
@@ -38,7 +46,7 @@ public class Ability : MonoBehaviour
         ended = true;
     }
 
-    void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (!ready)
         {

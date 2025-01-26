@@ -9,6 +9,12 @@ public class Enemy: ParentEntity {
     public float birth;
     public float time_lived;
     public float damage_produced;
+
+    public Enemy()
+    {
+        this.birth = 0;
+    }
+
     public Enemy(float birth) {
         this.birth = birth;
         // 
