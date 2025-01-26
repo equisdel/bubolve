@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class ParentEntity: Entity {
     
     public Entity child;
-    public List<Ability> abilities;
+    public List<Ability> abilities = new List<Ability>();
     
     
     // tiene habilidades
@@ -15,11 +15,19 @@ public class ParentEntity: Entity {
     }
 
     public void ExecuteAbility(int index) {
-        abilities[index].DoAction();
+        //abilities[index].DoAction();
     }
 
     public void EvolveAbility(int index) {
-        abilities[index].Evolve();  // GeneMarket?
+        //abilities[index].Evolve();  // GeneMarket?
+    }
+
+    public void AddAbility(Ability ability)
+    {
+        if(abilities.IndexOf(ability) == -1)
+        {
+            abilities.Add(ability);
+        }
     }
 
  

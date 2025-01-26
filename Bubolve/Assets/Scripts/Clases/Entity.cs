@@ -12,7 +12,9 @@ public class Entity {
     public float max_health;          // cuando se termina, reinicia la ronda con una vida menos
     public float health;
 
-    public enum Qualities { AGE, HEALTH, MOVEMENT_SPEED, SIZE, THICKNESS }; 
+    public float shield = 0;
+
+    public enum Qualities { AGE, HEALTH, MOVEMENT_SPEED, SIZE, THICKNESS, SHIELD }; 
 
     public void ModifyQuality(Qualities qualities, float value)
     {
@@ -35,6 +37,9 @@ public class Entity {
                 break;
             case Qualities.THICKNESS:
                 thickness += value;
+                break;
+            case Qualities.SHIELD:
+                shield += value;
                 break;
             default:    
                 Console.Write("Caso default: no hay tal cualidad.");
