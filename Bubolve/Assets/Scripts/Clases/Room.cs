@@ -1,6 +1,6 @@
-
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Reflection;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -22,11 +22,58 @@ public class Room : MonoBehaviour {
     private float max_damage_produced = 0;
     private float max_overall_score = 0;
 
+    private class Mutation {
+
+        public enum Mutations { SIZE, THICKNESS, MOV_SPEED, MAX_HEALTH, P_SHIELD, P_BLAST_WAVE, P_BUBBLE_CANNON, P_CHASE };
+        float p_mutation;
+        AnimationCurve values;
+
+        public Mutation(float p, AnimationCurve values) {
+            p_mutation = p;
+            this.values = values;
+        }
+
+        public float RollDice() {   // retorno entre -1 y 1, probabilidad no uniforme.
+            float alteration = 0.0F;
+            float random = Random.Range(0, 1);
+            if (random <= p_mutation)
+            {     // define la probabilidad de que se efectúe o no un cambio
+                alteration = (values.Evaluate(random) - 0.5F) * 2;   // define el tipo de mutación: [-1,+1]
+            }
+            return alteration;
+        }
+
+        public void Mutate(Enemy padre, Enemy hijo, Mutations Mutations) {
+            
+            foreach (string mutable in System.Enum.GetNames(typeof(Mutations))) {
+                float alteration = RollDice();  // valor de -1 a 1, más probablemente vale 0.
+                {
+                    switch (Mutations) { 
+                        case Mutations.SIZE:
+                            hijo.size = padre.size + alteration/padre.size;
+                            break;
+                            case Mutations.THICKNESS:break;
+                             
+                    }
+                    
+                
+                }
+            }
+
+        }
+
+
+
+        // se itera sobre todas las cualidades, todas con igual probabilidad de mutar
+
+    }
+   
+
     public void Start()
     {
         float xd = Random.Range(0f,1f);
         curve.Evaluate(xd);
-
+        Mutation mutation = new Mutation(0.1F, curve);
         for (int i = 0; i < enemyAmmount; i++)
         {
             GameObject enemyGameObject = Instantiate(enemyPrefab, spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity, transform);
@@ -53,6 +100,9 @@ public class Room : MonoBehaviour {
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
             enemyController.enemy.birth = birth_time;
+            // seteo las mutaciones basadas en fittest_enemy
+
+
             paths[index].enemies.Add(enemyController);
         }
     }

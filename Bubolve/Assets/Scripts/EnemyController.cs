@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
 
     public Slider lifeSlider;
 
-    void Awake()
+    void Start()
     {
         enemy = new Enemy
         {
