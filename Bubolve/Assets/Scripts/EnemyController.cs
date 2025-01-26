@@ -28,7 +28,9 @@ public class EnemyController : MonoBehaviour
 
     public Slider lifeSlider;
 
-    void Start()
+    private bool initialized = false;
+
+    public void Init()
     {
         enemy = new Enemy
         {
@@ -50,6 +52,13 @@ public class EnemyController : MonoBehaviour
             enemy.AddAbility(item);
             item.SetEntity(enemy, gameObject, bubbleGameObject);
         }
+
+        initialized = true;
+    }
+
+    void Start()
+    {
+        if (!initialized) Init();
     }
 
     // Update is called once per frame

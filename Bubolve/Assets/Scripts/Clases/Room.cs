@@ -134,8 +134,10 @@ public class Room : MonoBehaviour {
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
             enemyController.birth = birth_time;
+            enemyController.Init();
             // seteo las mutaciones basadas en fittest_enemy
-
+            //enemyController.enemy
+            //fittest_enemy.enemy
 
             enemies.Add(enemyController);
         }
@@ -175,8 +177,8 @@ public class Room : MonoBehaviour {
                 fittest = enemy;
                 fittest_fitness = actual_fitness;
             }
-            Debug.Log("Meilleur ennemie: " + fittest.name + " with " + actual_fitness);
         }
+        Debug.Log("Meilleur ennemie: " + fittest.name + " with " + actual_fitness);
         return fittest;
     }
 }
