@@ -12,8 +12,6 @@ public class Enemy: ParentEntity {
 
     public List<float> stats;
 
-
-
     public Enemy()
     {
         stats = new List<float>();
@@ -23,6 +21,12 @@ public class Enemy: ParentEntity {
     public Enemy(float birth) {
         this.birth = birth;
         // 
+    }
+
+    public override float MakeDamage(float value, Entity victim)
+    {
+        damage_produced += base.MakeDamage(value, victim);
+        return damage_produced;
     }
 
     public Enemy(Enemy antecesor, float birth) {

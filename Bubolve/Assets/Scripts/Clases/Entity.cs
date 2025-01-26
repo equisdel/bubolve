@@ -53,7 +53,7 @@ public class Entity {
 
     }
 
-    public float MakeDamage(float value, Entity victim) { 
+    public virtual float MakeDamage(float value, Entity victim) { 
         return victim.TakeDamage(value);
     }
 
