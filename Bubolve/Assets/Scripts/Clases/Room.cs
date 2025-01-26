@@ -43,12 +43,12 @@ public class Room : MonoBehaviour {
             return alteration;
         }
 
-        public void Mutate(Enemy padre, Enemy hijo, Mutations Mutations) {
+        public void Mutate(Enemy padre, Enemy hijo) {
             
-            foreach (string mutable in System.Enum.GetNames(typeof(Mutations))) {
+            foreach (string mutable in System.Enum.GetValues(typeof(Mutations))) {
                 float alteration = RollDice();  // valor de -1 a 1, m?s probablemente vale 0.
                 {
-                    switch (Mutations) { 
+                    switch (System.Enum.Parse(typeof(Mutations), mutable)) { 
                         case Mutations.SIZE:
                             hijo.size = Mathf.Min(Mathf.Max(padre.size + alteration * padre.size, 0), 1);
                             break;
@@ -125,6 +125,7 @@ public class Room : MonoBehaviour {
     public void CloseRoom(float grow) {  // se ejecuta cuando el jugador mata a todos los enemigos y elige una puerta
         // usa index para saber cu?l ser? la siguiente habitaci?n
         EnemyController fittest_enemy = GetFittestEnemy();
+        Mutation mutation = new Mutation(0.5F,curve);
         List<EnemyController> tempEnemies = new List<EnemyController>(enemies);
         enemies.Clear();
         float birth_time = Time.time;
@@ -135,6 +136,8 @@ public class Room : MonoBehaviour {
             enemyController.bubbleGameObject = bubbleGameObject;
             enemyController.birth = birth_time;
             enemyController.Init();
+            mutation.Mutate(fittest_enemy.enemy,enemyController.enemy);
+
             // seteo las mutaciones basadas en fittest_enemy
             //enemyController.enemy
             //fittest_enemy.enemy
@@ -178,7 +181,7 @@ public class Room : MonoBehaviour {
                 fittest_fitness = actual_fitness;
             }
         }
-        Debug.Log("Meilleur ennemie: " + fittest.name + " with " + actual_fitness);
+        //Debug.Log("Meilleur ennemie: " + fittest.name + " with " + actual_fitness);
         return fittest;
     }
 }
