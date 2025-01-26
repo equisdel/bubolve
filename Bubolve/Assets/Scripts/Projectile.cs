@@ -9,6 +9,9 @@ public class Projectile : MonoBehaviour
     public float speed;
     public float radius;
     public float lifeTime;
+    public float damage;
+
+    public GameObject source;
 
     private float currentTime = 0;
 
@@ -28,6 +31,27 @@ public class Projectile : MonoBehaviour
         } else
         {
             transform.position += direction * speed * Time.fixedDeltaTime;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject != source)
+        {
+
+            PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.bubble.TakeDamage(damage);
+                Destroy(gameObject);
+            }
+
+            EnemyController enemyController = other.gameObject.GetComponent<EnemyController>();
+            if (enemyController != null)
+            {
+                enemyController.enemy.TakeDamage(damage);
+                Destroy(gameObject);
+            }
         }
     }
 }

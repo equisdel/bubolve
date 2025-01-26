@@ -7,6 +7,7 @@ public class Entity {
 
     public float size;          // radio
     public float thickness;     // afecta que tanto impactan los ataques en la pérdida de health
+    public float attack_damage;  // escapar más rápido de los enemigos
     public float movement_speed;  // escapar más rápido de los enemigos
     public float age;             // correspondencia con el tamaño en view
     public float max_health;  
@@ -14,7 +15,7 @@ public class Entity {
 
     public float shield = 0;
 
-    public enum Qualities { AGE, HEALTH, MOVEMENT_SPEED, SIZE, THICKNESS, SHIELD }; 
+    public enum Qualities { AGE, HEALTH, MOVEMENT_SPEED, ATTACK_DAMAGE, SIZE, THICKNESS, SHIELD }; 
 
     public void ModifyQuality(Qualities qualities, float value)
     {
@@ -31,6 +32,9 @@ public class Entity {
                 break;
             case Qualities.MOVEMENT_SPEED:
                 movement_speed += value;
+                break;
+            case Qualities.ATTACK_DAMAGE:
+                attack_damage += value;
                 break;
             case Qualities.SIZE:
                 size += value;

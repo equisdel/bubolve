@@ -16,11 +16,8 @@ public class Enemy: ParentEntity {
 
     public Enemy()
     {
-        foreach (Ability ability in Ability.all_abilities) { 
-            this.AddAbility(ability);
-            stats.Add(Random.Range(0.0F,0.3F));    // número random entre .0 y .3 por ejemplo (depende de la habilidad, atributo cota superior (más descriptivo))
-        }
-        this.birth = 0;
+        stats = new List<float>();
+        birth = 0;
     }
 
     public Enemy(float birth) {
@@ -44,6 +41,12 @@ public class Enemy: ParentEntity {
     {
         time_lived = Time.time - birth;
         base.Die(); // llama al método de Entity
+    }
+
+    public override void AddAbility(Ability ability)
+    {
+        base.AddAbility(ability);
+        stats.Add(Random.Range(0.0F, 0.3F));
     }
 
     // Al atacar: debe registrar el daño hecho al jugador burbuja

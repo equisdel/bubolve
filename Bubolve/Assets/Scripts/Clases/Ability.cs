@@ -19,6 +19,7 @@ public class Ability : MonoBehaviour
     public static List<Ability> all_abilities;
 
     public Ability() {
+        if (all_abilities == null) all_abilities = new List<Ability>(); 
         all_abilities.Add(this);
     }
     public virtual void SetEntity(ParentEntity parentEntity, GameObject entityGameObject)

@@ -22,7 +22,7 @@ public class ParentEntity: Entity {
         //abilities[index].Evolve();  // GeneMarket?
     }
 
-    public void AddAbility(Ability ability)
+    public virtual void AddAbility(Ability ability)
     {
         if (abilities.IndexOf(ability) == -1)
         {
