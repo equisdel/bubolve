@@ -38,7 +38,7 @@ public class Room : MonoBehaviour {
             float random = Random.Range(0, 1);
             if (random <= p_mutation)
             {     // define la probabilidad de que se efectúe o no un cambio
-                alteration = (values.Evaluate(random) - 0.5F) * 2;   // define el tipo de mutación: [-1,+1]
+                alteration = (values.Evaluate(Random.Range(0, 1)) - 0.5F) * 2;   // define el tipo de mutación: [-1,+1]
             }
             return alteration;
         }
@@ -50,10 +50,32 @@ public class Room : MonoBehaviour {
                 {
                     switch (Mutations) { 
                         case Mutations.SIZE:
-                            hijo.size = padre.size + alteration/padre.size;
+                            hijo.size = Mathf.Min(Mathf.Max(padre.size + alteration * padre.size, 0), 1);
                             break;
-                            case Mutations.THICKNESS:break;
-                             
+                        case Mutations.THICKNESS:
+                            hijo.thickness = Mathf.Min(Mathf.Max(padre.thickness + alteration * padre.thickness, 0), 1);
+                            break;
+                        case Mutations.MOV_SPEED:
+                            hijo.movement_speed = Mathf.Min(Mathf.Max(padre.movement_speed + alteration * padre.movement_speed, 0), 1);
+                            break;
+                        case Mutations.MAX_HEALTH:
+                            hijo.max_health = Mathf.Min(Mathf.Max(padre.max_health + alteration * padre.max_health, 0), 1);
+                            break;
+                        case Mutations.P_SHIELD:
+                            hijo.stats[0] = Mathf.Min(Mathf.Max(padre.stats[0] + alteration * padre.stats[0], 0), 1);
+                            break;
+                        case Mutations.P_BLAST_WAVE:
+                            hijo.stats[1] = Mathf.Min(Mathf.Max(padre.stats[1] + alteration * padre.stats[1], 0), 1);
+                            break;
+                        case Mutations.P_BUBBLE_CANNON:
+                            hijo.stats[2] = Mathf.Min(Mathf.Max(padre.stats[2] + alteration * padre.stats[2], 0), 1);
+                            break;
+                        case Mutations.P_CHASE:
+                            hijo.stats[3] = Mathf.Min(Mathf.Max(padre.stats[3] + alteration * padre.stats[3], 0), 1);
+                            break;
+                        default:
+                            
+                            break;
                     }
                     
                 
