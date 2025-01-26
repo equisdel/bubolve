@@ -4,6 +4,7 @@ using UnityEngine;
 
 // unidad de evolución
 
+[System.Serializable]
 public class Enemy: ParentEntity {
 
     public float birth;

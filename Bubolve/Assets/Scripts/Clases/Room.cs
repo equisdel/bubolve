@@ -45,7 +45,7 @@ public class Room : MonoBehaviour {
 
         public void Mutate(Enemy padre, Enemy hijo) {
             
-            foreach (string mutable in System.Enum.GetValues(typeof(Mutations))) {
+            foreach (string mutable in System.Enum.GetNames(typeof(Mutations))) {
                 float alteration = RollDice();  // valor de -1 a 1, m?s probablemente vale 0.
                 {
                     switch (System.Enum.Parse(typeof(Mutations), mutable)) { 
@@ -68,10 +68,10 @@ public class Room : MonoBehaviour {
                             hijo.stats[1] = Mathf.Min(Mathf.Max(padre.stats[1] + alteration * padre.stats[1], 0), 1);
                             break;
                         case Mutations.P_BUBBLE_CANNON:
-                            hijo.stats[2] = Mathf.Min(Mathf.Max(padre.stats[2] + alteration * padre.stats[2], 0), 1);
+                            //hijo.stats[2] = Mathf.Min(Mathf.Max(padre.stats[2] + alteration * padre.stats[2], 0), 1);
                             break;
                         case Mutations.P_CHASE:
-                            hijo.stats[3] = Mathf.Min(Mathf.Max(padre.stats[3] + alteration * padre.stats[3], 0), 1);
+                            //hijo.stats[3] = Mathf.Min(Mathf.Max(padre.stats[3] + alteration * padre.stats[3], 0), 1);
                             break;
                         default:
                             
