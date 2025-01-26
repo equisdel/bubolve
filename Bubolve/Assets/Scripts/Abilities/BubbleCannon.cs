@@ -15,6 +15,7 @@ public class BubbleCannon : Ability
         Projectile projectile = projectileGamaObject.GetComponent<Projectile>();
         projectile.damage = damage + parentEntity.attack_damage * damageMultiplier;
         projectile.source = entityGameObject;
+        projectile.attacker = parentEntity;
         projectile.direction = dir;
 
     }

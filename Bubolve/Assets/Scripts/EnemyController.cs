@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
     public float age;             // correspondencia con el tamaño en view
     public float max_health;          // cuando se termina, reinicia la ronda con una vida menos
     public float health;
+    public float birth;
 
     public float shield = 0;
 
@@ -40,7 +41,8 @@ public class EnemyController : MonoBehaviour
             name = name,
             shield = shield,
             size = size,
-            thickness = thickness
+            thickness = thickness,
+            birth = birth
         };
 
         foreach (var item in baseAbilities)

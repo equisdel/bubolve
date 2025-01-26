@@ -114,7 +114,7 @@ public class Room : MonoBehaviour {
             enemies.Add(enemyController);
         }
 
-        GetFittestEnemy();
+        //GetFittestEnemy();
         Debug.Log("Done");
     }
 
@@ -128,12 +128,12 @@ public class Room : MonoBehaviour {
         List<EnemyController> tempEnemies = new List<EnemyController>(enemies);
         enemies.Clear();
         float birth_time = Time.time;
-        for (int i = 0; i < enemies.Count; i++) {   // cantidad fija de enemigos en este caso, mejoras?
+        for (int i = 0; i < enemyAmmount; i++) {   // cantidad fija de enemigos en este caso, mejoras?
 
             GameObject enemyGameObject = Instantiate(fittest_enemy.gameObject, spawnPoints[i].position, Quaternion.identity, transform);
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
-            enemyController.enemy.birth = birth_time;
+            enemyController.birth = birth_time;
             // seteo las mutaciones basadas en fittest_enemy
 
 
@@ -142,7 +142,7 @@ public class Room : MonoBehaviour {
 
         for (int i = tempEnemies.Count - 1; i >= 0; i--)
         {
-            Destroy(tempEnemies[i]);
+            Destroy(tempEnemies[i].gameObject);
         }
 
         playerController.Grow(grow);
@@ -175,7 +175,7 @@ public class Room : MonoBehaviour {
                 fittest = enemy;
                 fittest_fitness = actual_fitness;
             }
-            Debug.Log("Meilleur ennemie: "+fittest.name);
+            Debug.Log("Meilleur ennemie: " + fittest.name + " with " + actual_fitness);
         }
         return fittest;
     }

@@ -12,6 +12,7 @@ public class Projectile : MonoBehaviour
     public float damage;
 
     public GameObject source;
+    public Entity attacker;
 
     private float currentTime = 0;
 
@@ -42,14 +43,16 @@ public class Projectile : MonoBehaviour
             PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.bubble.TakeDamage(damage);
+                attacker.MakeDamage(damage, playerController.bubble);
+                //playerController.bubble.TakeDamage(damage);
                 Destroy(gameObject);
             }
 
             EnemyController enemyController = other.gameObject.GetComponent<EnemyController>();
             if (enemyController != null)
             {
-                enemyController.enemy.TakeDamage(damage);
+                attacker.MakeDamage(damage, enemyController.enemy);
+                //enemyController.enemy.TakeDamage(damage);
                 Destroy(gameObject);
             }
         }

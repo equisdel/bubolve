@@ -329,7 +329,7 @@ MonoBehaviour:
   maxGrowFrame: 0
   size: 1
   thickness: 1
-  movement_speed: 7
+  movement_speed: 15
   attack_damage: 10
   age: 0
   max_health: 100
@@ -628,7 +628,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 259067891}
-  m_LocalRotation: {x: 0.48897904, y: -0.000000025512847, z: 0.000000014301627, w: 0.87229556}
+  m_LocalRotation: {x: 0.488979, y: 0.00000000804997, z: -0.0000000045125375, w: 0.8722956}
   m_LocalPosition: {x: -15.6, y: 24.8, z: -18.439999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1249,8 +1249,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.48897904, y: -0.000000025512847, z: 0.000000014301627, w: 0.87229556}
-  m_LocalPosition: {x: -15.6, y: 29.480536, z: -10.787974}
+  m_LocalRotation: {x: 0.488979, y: 0.00000000804997, z: -0.0000000045125375, w: 0.8722956}
+  m_LocalPosition: {x: -15.6, y: 29.480537, z: -10.787974}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
