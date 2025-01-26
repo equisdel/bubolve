@@ -15,7 +15,7 @@ public class ParentEntity: Entity {
     }
 
     public void ExecuteAbility(int index) {
-        //abilities[index].DoAction();
+        abilities[index].DoAction(); // debería retornar la cantidad de daño que produce sobre el otro
     }
 
     public void EvolveAbility(int index) {

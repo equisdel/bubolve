@@ -9,7 +9,7 @@ public class Entity {
     public float thickness;     // afecta que tanto impactan los ataques en la pérdida de health
     public float movement_speed;  // escapar más rápido de los enemigos
     public float age;             // correspondencia con el tamaño en view
-    public float max_health;          // cuando se termina, reinicia la ronda con una vida menos
+    public float max_health;  
     public float health;
 
     public float shield = 0;
@@ -49,15 +49,20 @@ public class Entity {
 
     }
 
+    public float MakeDamage(float value, Entity victim) { 
+        return victim.TakeDamage(value);
+    }
+
     // recibir daño
-    public bool TakeDamage(float value) {
-        health -= value;
-        if (health <= 0)
-        {
-            Die();
-            return false;
+    public float TakeDamage(float value) {
+        // tener en cuenta el escudo y el grosor de la burbuja
+        float value_after_shield = (value - (value / 100 * shield));
+        float value_after_thickness = (value_after_shield - (value_after_shield / 100 * thickness));
+        health -= value_after_thickness;
+        if (health <= 0) { 
+            Die(); 
         }
-        return true;
+        return value_after_thickness;
     }
 
     public virtual void Die() { 
