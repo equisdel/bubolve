@@ -9,7 +9,7 @@ using UnityEngine;
 public class Room : MonoBehaviour {
     
     public List<Room> paths;
-    public List<Enemy> enemies;
+    public List<EnemyController> enemies;
     public GameObject enemyPrefab;
     public List<Transform> spawnPoints;
     public GameObject bubbleGameObject;
@@ -32,46 +32,53 @@ public class Room : MonoBehaviour {
             GameObject enemyGameObject = Instantiate(enemyPrefab, spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity, transform);
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
-            enemies.Add(enemyController.enemy);
+            enemies.Add(enemyController);
         }
 
         GetFittestEnemy();
         Debug.Log("Done");
     }
 
+
+
     // Al finalizar una ronda
 
     public void CloseRoom(int index) {  // se ejecuta cuando el jugador mata a todos los enemigos y elige una puerta
         // usa index para saber cu?l ser? la siguiente habitaci?n
-        Enemy fittest_enemy = GetFittestEnemy();
+        EnemyController fittest_enemy = GetFittestEnemy();
         float birth_time = Time.time;
         for (int i = 0; i < enemies.Count; i++) {   // cantidad fija de enemigos en este caso, mejoras?
-            paths[index].enemies.Add(new Enemy(fittest_enemy,birth_time));
+
+            GameObject enemyGameObject = Instantiate(fittest_enemy.gameObject, spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity, transform);
+            EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
+            enemyController.bubbleGameObject = bubbleGameObject;
+            enemyController.enemy.birth = birth_time;
+            paths[index].enemies.Add(enemyController);
         }
     }
 
     private void UpdateMaxValues() {
-        foreach (Enemy enemy in enemies) {
-            if (enemy.time_lived > max_time_lived) 
-                max_time_lived = enemy.time_lived;
-            if (enemy.damage_produced > max_damage_produced)
-                max_damage_produced = enemy.damage_produced;
-            if (enemy.GetScore() > max_overall_score)
-                max_overall_score = enemy.GetScore();
+        foreach (EnemyController enemyController in enemies) {
+            if (enemyController.enemy.time_lived > max_time_lived) 
+                max_time_lived = enemyController.enemy.time_lived;
+            if (enemyController.enemy.damage_produced > max_damage_produced)
+                max_damage_produced = enemyController.enemy.damage_produced;
+            if (enemyController.enemy.GetScore() > max_overall_score)
+                max_overall_score = enemyController.enemy.GetScore();
         }
     }
 
-    private float GetFitness(Enemy enemy)
+    private float GetFitness(EnemyController enemyController)
     {
-        return criteria[0] * enemy.time_lived / max_time_lived + criteria[1] * enemy.damage_produced / max_damage_produced + criteria[2] * enemy.GetScore() / max_overall_score;
+        return criteria[0] * enemyController.enemy.time_lived / max_time_lived + criteria[1] * enemyController.enemy.damage_produced / max_damage_produced + criteria[2] * enemyController.enemy.GetScore() / max_overall_score;
     }
 
     // m?todo para seleccionar al mejor enemigo
-    public Enemy GetFittestEnemy() {
+    public EnemyController GetFittestEnemy() {
         UpdateMaxValues();
-        Enemy fittest = null;
+        EnemyController fittest = null;
         float fittest_fitness = -1;
-        foreach (Enemy enemy in enemies) {
+        foreach (EnemyController enemy in enemies) {
             float actual_fitness = GetFitness(enemy);
             if (actual_fitness > fittest_fitness) { 
                 fittest = enemy;
