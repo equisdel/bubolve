@@ -50,30 +50,30 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
     // Update is called once per frame
     void Update()
     {
-        int abilityIndex = Random.Range(0, enemy.abilities.Count); 
-
-        Vector3 dir = (bubbleGameObject.transform.position - gameObject.transform.position).normalized;
-
-        Ability ability = enemy.abilities[abilityIndex];
-        if (ability != null)
+        if(enemy.health > 0)
         {
-            if (ability.ready)
-            {
-                ability.DoAction(dir);
-            }
-        }
+            int abilityIndex = Random.Range(0, enemy.abilities.Count); 
 
-        Vector3 mov = new Vector3(0, -1, 0);
-        characterController.Move(mov.normalized * Time.deltaTime);
+            Vector3 dir = (bubbleGameObject.transform.position - gameObject.transform.position).normalized;
+
+            Ability ability = enemy.abilities[abilityIndex];
+            if (ability != null)
+            {
+                if (ability.ready)
+                {
+                    ability.DoAction(dir);
+                }
+            }
+
+            Vector3 mov = new Vector3(0, -1, 0);
+            characterController.Move(mov.normalized * Time.deltaTime);
+        } else
+        {
+
+        }
     }
 
     void FixedUpdate()

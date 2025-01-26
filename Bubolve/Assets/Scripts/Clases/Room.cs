@@ -8,11 +8,11 @@ using UnityEngine;
 
 public class Room : MonoBehaviour {
     
-    public List<Room> paths;
     public List<EnemyController> enemies;
     public GameObject enemyPrefab;
     public List<Transform> spawnPoints;
     public GameObject bubbleGameObject;
+    public PlayerController playerController;
     public bool exit;
     public int enemyAmmount = 5;
     public AnimationCurve curve;
@@ -37,8 +37,8 @@ public class Room : MonoBehaviour {
             float alteration = 0.0F;
             float random = Random.Range(0, 1);
             if (random <= p_mutation)
-            {     // define la probabilidad de que se efectúe o no un cambio
-                alteration = (values.Evaluate(Random.Range(0, 1)) - 0.5F) * 2;   // define el tipo de mutación: [-1,+1]
+            {     // define la probabilidad de que se efect?e o no un cambio
+                alteration = (values.Evaluate(Random.Range(0, 1)) - 0.5F) * 2;   // define el tipo de mutaci?n: [-1,+1]
             }
             return alteration;
         }
@@ -46,7 +46,7 @@ public class Room : MonoBehaviour {
         public void Mutate(Enemy padre, Enemy hijo, Mutations Mutations) {
             
             foreach (string mutable in System.Enum.GetNames(typeof(Mutations))) {
-                float alteration = RollDice();  // valor de -1 a 1, más probablemente vale 0.
+                float alteration = RollDice();  // valor de -1 a 1, m?s probablemente vale 0.
                 {
                     switch (Mutations) { 
                         case Mutations.SIZE:
@@ -91,6 +91,16 @@ public class Room : MonoBehaviour {
     }
    
 
+    public bool complete { get
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i].enemy.health > 0) return false;
+            }
+            return true;
+        }
+    }
+
     public void Start()
     {
         float xd = Random.Range(0f,1f);
@@ -98,7 +108,7 @@ public class Room : MonoBehaviour {
         Mutation mutation = new Mutation(0.1F, curve);
         for (int i = 0; i < enemyAmmount; i++)
         {
-            GameObject enemyGameObject = Instantiate(enemyPrefab, spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity, transform);
+            GameObject enemyGameObject = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity, transform);
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
             enemies.Add(enemyController);
@@ -112,21 +122,30 @@ public class Room : MonoBehaviour {
 
     // Al finalizar una ronda
 
-    public void CloseRoom(int index) {  // se ejecuta cuando el jugador mata a todos los enemigos y elige una puerta
+    public void CloseRoom(float grow) {  // se ejecuta cuando el jugador mata a todos los enemigos y elige una puerta
         // usa index para saber cu?l ser? la siguiente habitaci?n
         EnemyController fittest_enemy = GetFittestEnemy();
+        List<EnemyController> tempEnemies = new List<EnemyController>(enemies);
+        enemies.Clear();
         float birth_time = Time.time;
         for (int i = 0; i < enemies.Count; i++) {   // cantidad fija de enemigos en este caso, mejoras?
 
-            GameObject enemyGameObject = Instantiate(fittest_enemy.gameObject, spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity, transform);
+            GameObject enemyGameObject = Instantiate(fittest_enemy.gameObject, spawnPoints[i].position, Quaternion.identity, transform);
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
             enemyController.enemy.birth = birth_time;
             // seteo las mutaciones basadas en fittest_enemy
 
 
-            paths[index].enemies.Add(enemyController);
+            enemies.Add(enemyController);
         }
+
+        for (int i = tempEnemies.Count - 1; i >= 0; i--)
+        {
+            Destroy(tempEnemies[i]);
+        }
+
+        playerController.Grow(grow);
     }
 
     private void UpdateMaxValues() {
@@ -149,7 +168,7 @@ public class Room : MonoBehaviour {
     public EnemyController GetFittestEnemy() {
         UpdateMaxValues();
         EnemyController fittest = null;
-        float fittest_fitness = -1;
+        float fittest_fitness = float.MinValue;
         foreach (EnemyController enemy in enemies) {
             float actual_fitness = GetFitness(enemy);
             if (actual_fitness > fittest_fitness) { 

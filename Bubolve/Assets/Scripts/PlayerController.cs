@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public string description;
 
     public CharacterController characterController;
+    public Animator animator;
+    public float maxGrowFrame;
 
     public float size;          // radio
     public float thickness;     // afecta que tanto impactan los ataques en la pérdida de health
@@ -140,5 +143,13 @@ public class PlayerController : MonoBehaviour
         }
 
         lifeSlider.value = bubble.health / bubble.max_health;
+    }
+
+    internal void Grow(float v)
+    {
+        age += v;
+        bubble.age += v;
+
+
     }
 }
