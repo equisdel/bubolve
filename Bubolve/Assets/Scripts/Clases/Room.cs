@@ -35,10 +35,10 @@ public class Room : MonoBehaviour {
 
         public float RollDice() {   // retorno entre -1 y 1, probabilidad no uniforme.
             float alteration = 0.0F;
-            float random = Random.Range(0, 1);
+            float random = Random.Range(0F, 1F);
             if (random <= p_mutation)
             {     // define la probabilidad de que se efect?e o no un cambio
-                alteration = (values.Evaluate(Random.Range(0, 1)) - 0.5F) * 2;   // define el tipo de mutaci?n: [-1,+1]
+                alteration = (values.Evaluate(Random.Range(0F, 1F)) - 0.5F) * 2F;   // define el tipo de mutaci?n: [-1,+1]
             }
             return alteration;
         }
