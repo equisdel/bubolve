@@ -15,15 +15,18 @@ public class Room : MonoBehaviour {
     public GameObject bubbleGameObject;
     public bool exit;
     public int enemyAmmount = 5;
+    public AnimationCurve curve;
 
     private float[] criteria = new float[3] { 0.3F, 0.5F, 0.2F };   // deber?a sumar siempre 1
     private float max_time_lived = 0;
     private float max_damage_produced = 0;
     private float max_overall_score = 0;
 
-
     public void Start()
     {
+        float xd = Random.Range(0f,1f);
+        curve.Evaluate(xd);
+
         for (int i = 0; i < enemyAmmount; i++)
         {
             GameObject enemyGameObject = Instantiate(enemyPrefab, spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity, transform);

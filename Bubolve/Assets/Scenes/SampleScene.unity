@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -240,6 +240,7 @@ MonoBehaviour:
   size: 1
   thickness: 1
   movement_speed: 3
+  attack_damage: 0
   age: 0
   max_health: 100
   health: 100
@@ -247,9 +248,9 @@ MonoBehaviour:
   baseAbilities:
   - {fileID: 188506118}
   - {fileID: 188506119}
-  abilityUIPrefab: {fileID: 6894207817884264642, guid: 4c8903fe3b4164f768bd656e6b133ac4, type: 3}
-  abilityUIParent: {fileID: 1587028040}
-  lifeSlider: {fileID: 1400190551}
+  abilityUIPrefab: {fileID: 0}
+  abilityUIParent: {fileID: 0}
+  lifeSlider: {fileID: 0}
 --- !u!135 &188506114
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -385,6 +386,80 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &267923232
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 267923234}
+  - component: {fileID: 267923233}
+  m_Layer: 0
+  m_Name: RoomController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &267923233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267923232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328618a63e3921b40a5837e3d63e3936, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paths: []
+  enemyPrefab: {fileID: 0}
+  spawnPoints: []
+  bubbleGameObject: {fileID: 0}
+  exit: 0
+  enemyAmmount: 5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 3.2783017
+      outSlope: 3.2783017
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.030215828
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.3265116
+      outSlope: 3.3265116
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14676261
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &267923234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267923232}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &345934415
 GameObject:
   m_ObjectHideFlags: 0
