@@ -10,8 +10,16 @@ public class Enemy: ParentEntity {
     public float time_lived;
     public float damage_produced;
 
+    public List<float> stats;
+
+
+
     public Enemy()
     {
+        foreach (Ability ability in Ability.all_abilities) { 
+            this.AddAbility(ability);
+            stats.Add(Random.Range(0.0F,0.3F));    // número random entre .0 y .3 por ejemplo (depende de la habilidad, atributo cota superior (más descriptivo))
+        }
         this.birth = 0;
     }
 
@@ -22,8 +30,14 @@ public class Enemy: ParentEntity {
 
     public Enemy(Enemy antecesor, float birth) {
         // mutación random controlada: determinar eso
-        
-        this.birth = birth; // cómo se llama al de arriba? curiosidad
+        // ruleta: del 1 al x son cualidades, el resto son probabilidades de 
+        this.birth = birth;
+    }
+
+    public float GetScore() {
+        float overall_score = 0;
+        foreach (float stat in this.stats) { overall_score += stat; }
+        return overall_score;
     }
 
     public override void Die()

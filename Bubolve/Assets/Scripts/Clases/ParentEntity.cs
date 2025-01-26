@@ -24,7 +24,7 @@ public class ParentEntity: Entity {
 
     public void AddAbility(Ability ability)
     {
-        if(abilities.IndexOf(ability) == -1)
+        if (abilities.IndexOf(ability) == -1)
         {
             abilities.Add(ability);
         }

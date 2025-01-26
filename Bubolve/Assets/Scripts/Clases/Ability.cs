@@ -16,6 +16,11 @@ public class Ability : MonoBehaviour
     internal GameObject entityGameObject;
     internal GameObject targetEntity;
 
+    public static List<Ability> all_abilities;
+
+    public Ability() {
+        all_abilities.Add(this);
+    }
     public virtual void SetEntity(ParentEntity parentEntity, GameObject entityGameObject)
     {
         this.parentEntity = parentEntity;
