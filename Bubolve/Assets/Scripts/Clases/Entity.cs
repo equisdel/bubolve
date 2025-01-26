@@ -45,16 +45,19 @@ public class Entity {
     }
 
     // recibir daño
-    public void getDamage(float value) {
+    public bool GetDamage(float value) {
         health -= value;
-        if (health <= 0) Die();
+        if (health <= 0)
+        {
+            Die();
+            return false;
+        }
+        return true;
     }
 
-    public void Die() { 
-
+    public virtual void Die() { 
+        // ni idea qué pasa acá, muy filosófico todo
     }
-    // 
-
 
 }
 
