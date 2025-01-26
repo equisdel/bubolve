@@ -55,10 +55,26 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(enemy.health > 0)
+        if (enemy.health > 0)
         {
-            int abilityIndex = Random.Range(0, enemy.abilities.Count); 
 
+            List<float> p_acumulada = new List<float> {};
+            float anterior = 0.0F;
+            for (int i = 0; i < enemy.stats.Count; i++) {
+                p_acumulada.Add(anterior + enemy.stats[i]);
+                anterior = p_acumulada[i];
+            }
+
+            int abilityIndex = -1;
+            float random_score = Random.Range(0.0F, enemy.GetScore());
+            for (int i = 0; i < p_acumulada.Count; i++) {
+                if (random_score <= p_acumulada[i]) {
+                    // se ejecuta esa acción
+                    abilityIndex = i;
+                    break;
+                }
+            }
+        
             Vector3 dir = (bubbleGameObject.transform.position - gameObject.transform.position).normalized;
 
             Ability ability = enemy.abilities[abilityIndex];
