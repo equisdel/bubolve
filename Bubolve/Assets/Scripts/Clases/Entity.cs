@@ -14,7 +14,7 @@ public class Entity {
 
     public enum Qualities { AGE, HEALTH, MOVEMENT_SPEED, SIZE, THICKNESS }; 
 
-    public void ModifyQuality(Qualities qualities, int value)
+    public void ModifyQuality(Qualities qualities, float value)
     {
 
         // verificar que el valor sea coherente desde el mercado
@@ -45,7 +45,7 @@ public class Entity {
     }
 
     // recibir daño
-    public bool GetDamage(float value) {
+    public bool TakeDamage(float value) {
         health -= value;
         if (health <= 0)
         {
