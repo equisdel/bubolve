@@ -19,7 +19,7 @@ Bubolve is a game about **evolutionary algorithms**. The main goal is to ensure 
 
 ## 🚀 How to Play
 
-1. Move using **[arrow keys/WASD/controller input]**.
+1. Move using **[WASD-123]** and **[MOUSE LEFT CLICK]**.
 2. Attack and dodge enemy viruses while managing resources.
 3. Survive as long as possible against the ever-evolving enemies.
 4. Adapt strategies as the viruses become stronger and more agile each round.
