@@ -46,7 +46,7 @@ Bubolve is a game about **evolutionary algorithms**. The main goal is to ensure 
 ## 🔗 Links
 
 - 🕹️ Play on Global Game Jam: [Bubolve GGJ Page](https://globalgamejam.org/games/2025/bubolve-1)
-- 📺 Gameplay Trailer: [YouTube Video](https://your-youtube-link.com)
+- 📺 Gameplay Trailer: [YouTube Video](https://youtu.be/pMzRUks352o)
 
 ## 🛠️ Built With
 
