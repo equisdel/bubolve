@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,11 @@ public class PlayerController : MonoBehaviour
     public Transform abilityUIParent;
 
     public Slider lifeSlider;
+    public TextMeshProUGUI lifeText;
+
+    public GameObject gameOverPanel;
+    public TextMeshProUGUI roomText;
+    public Room room;
 
     private List<AbilityUI> abilitiesUI = new List<AbilityUI>();
 
@@ -38,6 +44,9 @@ public class PlayerController : MonoBehaviour
 
     
     void Awake(){
+
+        gameOverPanel.SetActive(false);
+
         bubble = new Bubble
         {
             age = age,
@@ -61,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
             GameObject abilityUIGameObject = Instantiate(abilityUIPrefab, abilityUIParent);
             AbilityUI abilityUI = abilityUIGameObject.GetComponent<AbilityUI>();
-            abilityUI.SetData(i + 1, Mathf.Min(1, item.currentTime / item.cooldown), item.ended, item.ready, selectedAbilityIndex == i);
+            abilityUI.SetData(i, Mathf.Min(1, item.currentTime / item.cooldown), item.ended, item.ready, selectedAbilityIndex == i || i == 0);
             abilitiesUI.Add(abilityUI);
         }
     }
@@ -75,6 +84,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(bubble.health <= 0)
+        {
+            roomText.text = "Highest Room: " + room.room;
+            gameOverPanel.SetActive(true);
+
+            return;
+        }
+
         Vector3 mov = new Vector3(0, -1, 0);
         if (Input.GetKey(KeyCode.A))
         {
@@ -97,15 +114,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Alpha1))
         {
-            selectedAbilityIndex = 0;
-        }
-        if (Input.GetKey(KeyCode.Alpha2))
-        {
             selectedAbilityIndex = 1;
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
 
             var groundPlane = new Plane(Vector3.up, 0.5f);
             var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -128,6 +137,60 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            selectedAbilityIndex = 2;
+
+            var groundPlane = new Plane(Vector3.up, 0.5f);
+            var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float hitDistance;
+
+            if (groundPlane.Raycast(mouseRay, out hitDistance))
+            {
+                Vector3 pos = mouseRay.GetPoint(hitDistance);
+                Vector3 dir = (pos - transform.position);
+                dir.Scale(new Vector3(1, 0, 1));
+                dir.Normalize();
+
+                Ability ability = bubble.abilities[selectedAbilityIndex];
+                if (ability != null)
+                {
+                    if (ability.ready)
+                    {
+                        ability.DoAction(dir);
+                    }
+                }
+            }
+        }
+        /*if (Input.GetKey(KeyCode.Alpha3))
+        {
+            selectedAbilityIndex = 3;
+        }*/
+
+        if (Input.GetMouseButtonDown(0))
+        {
+
+            var groundPlane = new Plane(Vector3.up, 0.5f);
+            var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float hitDistance;
+
+            if (groundPlane.Raycast(mouseRay, out hitDistance))
+            {
+                Vector3 pos = mouseRay.GetPoint(hitDistance);
+                Vector3 dir = (pos - transform.position);
+                dir.Scale(new Vector3(1, 0, 1));
+                dir.Normalize();
+
+                Ability ability = bubble.abilities[0];
+                if (ability != null)
+                {
+                    if (ability.ready)
+                    {
+                        ability.DoAction(dir);
+                    }
+                }
+            }
+        }
     }
 
     void FixedUpdate(){
@@ -138,11 +201,12 @@ public class PlayerController : MonoBehaviour
         {
             Ability item = baseAbilities[i];
             AbilityUI abilityUI = abilitiesUI[i];
-            abilityUI.SetData(i + 1, Mathf.Min(1, item.currentTime/item.cooldown), item.ended, item.ready, selectedAbilityIndex == i);
+            abilityUI.SetData(i, Mathf.Min(1, item.currentTime/item.cooldown), item.ended, item.ready, selectedAbilityIndex == i || i == 0);
             abilitiesUI.Add(abilityUI);
         }
 
         lifeSlider.value = bubble.health / bubble.max_health;
+        lifeText.text = Mathf.CeilToInt(bubble.health).ToString();
     }
 
     internal void Grow(float v)

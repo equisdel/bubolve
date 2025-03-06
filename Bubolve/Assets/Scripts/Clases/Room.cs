@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Reflection;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -16,6 +17,10 @@ public class Room : MonoBehaviour {
     public bool exit;
     public int enemyAmmount = 5;
     public AnimationCurve curve;
+    public TextMeshProUGUI remainingText;
+    public TextMeshProUGUI roomText;
+    public List<GateTrigger> gateTriggers;
+    public int room = 0;
 
     private float[] criteria = new float[3] { 0.3F, 0.5F, 0.2F };   // deber?a sumar siempre 1
     private float max_time_lived = 0;
@@ -44,41 +49,40 @@ public class Room : MonoBehaviour {
         }
 
         public void Mutate(Enemy padre, Enemy hijo) {
-            
+
+            float mutationStrenght = values.Evaluate(Random.Range(0F, 1F));
             foreach (string mutable in System.Enum.GetNames(typeof(Mutations))) {
                 float alteration = RollDice();  // valor de -1 a 1, m?s probablemente vale 0.
-                {
-                    switch (System.Enum.Parse(typeof(Mutations), mutable)) { 
-                        case Mutations.SIZE:
-                            hijo.size = Mathf.Min(Mathf.Max(padre.size + alteration * padre.size, 0), 1);
-                            break;
-                        case Mutations.THICKNESS:
-                            hijo.thickness = Mathf.Min(Mathf.Max(padre.thickness + alteration * padre.thickness, 0), 1);
-                            break;
-                        case Mutations.MOV_SPEED:
-                            hijo.movement_speed = Mathf.Min(Mathf.Max(padre.movement_speed + alteration * padre.movement_speed, 0), 1);
-                            break;
-                        case Mutations.MAX_HEALTH:
-                            hijo.max_health = Mathf.Min(Mathf.Max(padre.max_health + alteration * padre.max_health, 0), 1);
-                            break;
-                        case Mutations.P_SHIELD:
-                            hijo.stats[0] = Mathf.Min(Mathf.Max(padre.stats[0] + alteration * padre.stats[0], 0), 1);
-                            break;
-                        case Mutations.P_BLAST_WAVE:
-                            hijo.stats[1] = Mathf.Min(Mathf.Max(padre.stats[1] + alteration * padre.stats[1], 0), 1);
-                            break;
-                        case Mutations.P_BUBBLE_CANNON:
-                            //hijo.stats[2] = Mathf.Min(Mathf.Max(padre.stats[2] + alteration * padre.stats[2], 0), 1);
-                            break;
-                        case Mutations.P_CHASE:
-                            //hijo.stats[3] = Mathf.Min(Mathf.Max(padre.stats[3] + alteration * padre.stats[3], 0), 1);
-                            break;
-                        default:
+                switch (System.Enum.Parse(typeof(Mutations), mutable)) { 
+                    case Mutations.SIZE:
+                        hijo.size = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.size, alteration, mutationStrenght), 0), 1f);
+                        break;
+                    case Mutations.THICKNESS:
+                        hijo.thickness = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.thickness, alteration, mutationStrenght), 0), 1f);
+                        break;
+                    case Mutations.MOV_SPEED:
+                        hijo.movement_speed = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.movement_speed, alteration, mutationStrenght), 0), 1f);
+                        break;
+                    case Mutations.MAX_HEALTH:
+                        float new_health = Mathf.Max(Mathf.Lerp(padre.max_health, alteration/2f + 0.5f, mutationStrenght), 0);
+                        hijo.health = new_health;
+                        hijo.max_health = new_health;
+                        break;
+                    case Mutations.P_SHIELD:
+                        hijo.stats[0] = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.stats[0], alteration, mutationStrenght), 0), 1f);
+                        break;
+                    case Mutations.P_BLAST_WAVE:
+                        hijo.stats[1] = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.stats[1], alteration, mutationStrenght), 0), 1f);
+                        break;
+                    case Mutations.P_BUBBLE_CANNON:
+                        hijo.stats[2] = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.stats[2], alteration, mutationStrenght), 0), 1f);
+                        break;
+                    case Mutations.P_CHASE:
+                        hijo.stats[3] = Mathf.Min(Mathf.Max(Mathf.Lerp(padre.stats[3], alteration, mutationStrenght), 0), 1f);
+                        break;
+                    default:
                             
-                            break;
-                    }
-                    
-                
+                        break;
                 }
             }
 
@@ -111,6 +115,13 @@ public class Room : MonoBehaviour {
             GameObject enemyGameObject = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity, transform);
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
+            enemyController.Init();
+
+            enemyController.enemy.stats[0] = 0.0f;
+            enemyController.enemy.stats[1] = 0.0f;
+            enemyController.enemy.stats[2] = 0.7f;
+            enemyController.enemy.stats[3] = 0.7f;
+
             enemies.Add(enemyController);
         }
 
@@ -118,6 +129,33 @@ public class Room : MonoBehaviour {
         Debug.Log("Done");
     }
 
+    public void Update()
+    {
+        int aliveEnemies = 0;
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            if (enemies[i].enemy.health > 0) aliveEnemies++;
+        }
+        if (aliveEnemies == 0)
+        {
+            remainingText.text = "Climb to the next room!";
+            if (!exit)
+            {
+                exit = true;
+                room++;
+            }
+        } else
+        {
+            remainingText.text = "Remeaining Virus: " + aliveEnemies.ToString();
+            exit = false;
+        }
+        foreach (var item in gateTriggers)
+        {
+            item.SetPortal(exit);
+        }
+        roomText.text = "Room: " + room;
+
+    }
 
 
     // Al finalizar una ronda
@@ -132,6 +170,7 @@ public class Room : MonoBehaviour {
         for (int i = 0; i < enemyAmmount; i++) {   // cantidad fija de enemigos en este caso, mejoras?
 
             GameObject enemyGameObject = Instantiate(fittest_enemy.gameObject, spawnPoints[i].position, Quaternion.identity, transform);
+            enemyGameObject.name = "Enemy G" + room;
             EnemyController enemyController = enemyGameObject.GetComponent<EnemyController>();
             enemyController.bubbleGameObject = bubbleGameObject;
             enemyController.birth = birth_time;
@@ -181,6 +220,7 @@ public class Room : MonoBehaviour {
                 fittest_fitness = actual_fitness;
             }
         }
+        if (fittest) fittest = enemies[0];
         //Debug.Log("Meilleur ennemie: " + fittest.name + " with " + actual_fitness);
         return fittest;
     }

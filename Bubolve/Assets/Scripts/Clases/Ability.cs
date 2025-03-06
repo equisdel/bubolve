@@ -16,12 +16,6 @@ public class Ability : MonoBehaviour
     internal GameObject entityGameObject;
     internal GameObject targetEntity;
 
-    public static List<Ability> all_abilities;
-
-    public Ability() {
-        if (all_abilities == null) all_abilities = new List<Ability>(); 
-        all_abilities.Add(this);
-    }
     public virtual void SetEntity(ParentEntity parentEntity, GameObject entityGameObject)
     {
         this.parentEntity = parentEntity;
@@ -49,6 +43,7 @@ public class Ability : MonoBehaviour
 
     public virtual void EndAction()
     {
+        Debug.Log("End Action");
         ended = true;
     }
 
@@ -63,7 +58,7 @@ public class Ability : MonoBehaviour
 
             } else
             {
-                if (currentTime >= activeTime)
+                if (currentTime >= activeTime && !ended)
                 {
                     EndAction();
                 }

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class Entity {
@@ -61,11 +62,13 @@ public class Entity {
     // recibir daño
     public float TakeDamage(float value) {
         // tener en cuenta el escudo y el grosor de la burbuja
-        float value_after_shield = (value - (value / 100 * shield));
+        float value_after_shield = value - (value * Mathf.Min(shield/100f, 0.9f));
         float value_after_thickness = (value_after_shield - (value_after_shield / 100 * thickness));
         health -= value_after_thickness;
         if (health <= 0) { 
-            Die(); 
+            Die();
+            health = 0;
+            value_after_thickness = 0;
         }
         return value_after_thickness;
     }

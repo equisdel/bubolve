@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +28,8 @@ public class EnemyController : MonoBehaviour
     public Enemy enemy;
 
     public Slider lifeSlider;
+    public GameObject lifeSliderFill;
+    public TextMeshProUGUI lifeText;
 
     private bool initialized = false;
 
@@ -67,14 +70,14 @@ public class EnemyController : MonoBehaviour
         if (enemy.health > 0)
         {
 
-            List<float> p_acumulada = new List<float> {};
+            int abilityIndex = -1;
+            /*List<float> p_acumulada = new List<float> {};
             float anterior = 0.0F;
             for (int i = 0; i < enemy.stats.Count; i++) {
                 p_acumulada.Add(anterior + enemy.stats[i]);
                 anterior = p_acumulada[i];
             }
 
-            int abilityIndex = -1;
             float random_score = Random.Range(0.0F, enemy.GetScore());
             for (int i = 0; i < p_acumulada.Count; i++) {
                 if (random_score <= p_acumulada[i]) {
@@ -82,16 +85,29 @@ public class EnemyController : MonoBehaviour
                     abilityIndex = i;
                     break;
                 }
+            }*/
+            for (int i = 0; i < enemy.stats.Count; i++)
+            {
+                float random_score = Random.Range(0.0F, enemy.GetScore());
+                if (enemy.stats[i] > random_score &&  enemy.abilities[i].ready)
+                {
+                    abilityIndex = i;
+                    Debug.Log(enemy.abilities[abilityIndex].name);
+                    break;
+                }
             }
-        
+
             Vector3 dir = (bubbleGameObject.transform.position - gameObject.transform.position).normalized;
 
-            Ability ability = enemy.abilities[abilityIndex];
-            if (ability != null)
+            if (abilityIndex != -1)
             {
-                if (ability.ready)
+                Ability ability = enemy.abilities[abilityIndex];
+                if (ability != null)
                 {
-                    ability.DoAction(dir);
+                    if (ability.ready)
+                    {
+                        ability.DoAction(dir);
+                    }
                 }
             }
 
@@ -106,5 +122,7 @@ public class EnemyController : MonoBehaviour
     void FixedUpdate()
     {
         lifeSlider.value = enemy.health / enemy.max_health;
+        lifeText.text = Mathf.CeilToInt(enemy.health).ToString();
+        if (enemy.health <= 0) lifeSliderFill.SetActive(false);
     }
 }

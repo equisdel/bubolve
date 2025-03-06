@@ -51,7 +51,7 @@ public class Enemy: ParentEntity {
     public override void AddAbility(Ability ability)
     {
         base.AddAbility(ability);
-        stats.Add(Random.Range(0.0F, 0.3F));
+        stats.Add(Random.Range(0.0f, 0.3f));
     }
 
     // Al atacar: debe registrar el daño hecho al jugador burbuja
